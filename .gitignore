@@ -1,0 +1,11 @@
+# .gitignore
+
+# Ignore node_modules folder in the frontend
+frontend/node_modules/
+
+# Ignore node_modules folder in the frontend
+backend/node_modules/
+
+# Ignore any build artifacts
+build/
+dist/
