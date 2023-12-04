@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import Layout from '../../components/Layout/Layout'
 import "../Auth/Signup.css"
+import axios from "axios"
+import {useNavigate} from "react-router-dom"
 
 
 const Signup = () => {
@@ -11,10 +13,25 @@ const Signup = () => {
     const [phone, setPhone] = useState("")
     const [address, setAddress] = useState("")
 
-    const handleSubmit=(e)=>{
+    const navigate=useNavigate()
+
+    //form submit
+    const handleSubmit=async(e)=>{
         e.preventDefault()
-        console.log(name,email,password,phone,address);
-        alert("Registered successfully")
+        try {
+            
+            const res=await axios.post(`http://localhost:8080/api/v1/auth/register`,{name,email,password,phone,address})
+            if(res.data.success){
+                alert(res.data.message)
+                navigate("/login")
+            }else{
+                alert(res.data.message)
+            }
+            
+        } catch (error) {
+            console.log(error);
+            alert(error)
+        }
     }
 
     return (
