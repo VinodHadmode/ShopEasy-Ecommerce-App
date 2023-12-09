@@ -1,7 +1,6 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400&display=swap');
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -12,25 +11,25 @@
 
 /* navbar css  */
 
-.navbar{
+.navbar {
   font-family: 'Poppins', sans-serif;
   font-size: 17px;
   line-height: 26px;
   text-transform: uppercase;
   box-shadow: 0px 8px 6px -6px grey;
-  --webkit-box-shadow:0px 8px 6px -6px grey;
+  --webkit-box-shadow: 0px 8px 6px -6px grey;
   border-bottom: 0.5px solid grey !important;
 }
 
-.nav-link{
+.nav-link {
   font-weight: 500 !important;
- }
-
-.active{
-   border-bottom: 1px solid black;
 }
 
-.navbar-brand{
+.active {
+  border-bottom: 1px solid black;
+}
+
+.navbar-brand {
   font-weight: 700;
   font-family: "roboto";
   letter-spacing: 3px;
@@ -39,26 +38,26 @@
 
 /* footer css  */
 
-.footer{
+.footer {
   color: white;
   padding: 25px;
   background-color: rgb(71, 68, 68);
 }
 
 .footer a {
-   text-decoration: none;
-   color: white;
-   padding: 30px;
+  text-decoration: none;
+  color: white;
+  padding: 30px;
 }
 
 .footer a:hover {
-   color: black;
-   border-bottom: 1px solid white;
+  color: black;
+  border-bottom: 1px solid white;
 }
 
 /* page not found css  */
 
-.pnf{
+.pnf {
   display: flex;
   min-height: 60vh;
   flex-direction: column;
@@ -66,16 +65,16 @@
   justify-content: center;
 }
 
-.pnf-title{
+.pnf-title {
   font-size: 70px;
   font-weight: 700;
 }
 
-.pnf-heading{
+.pnf-heading {
   font-weight: normal;
 }
 
-.pnf-btn{
+.pnf-btn {
   color: black;
   border: 1px solid black;
   text-decoration: none;
@@ -84,9 +83,15 @@
   border-radius: 5px;
 }
 
-.pnf-btn:hover{
+.pnf-btn:hover {
   border: 1px solid rgb(224, 63, 63);
   text-decoration: none;
   padding: 10px;
   margin-top: 10px;
+}
+
+/* =============================== */
+.product-link {
+  text-decoration: none;
+  color: black;
 }

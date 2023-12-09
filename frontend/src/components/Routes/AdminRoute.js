@@ -1,36 +1,51 @@
-import React, { useEffect, useState } from 'react'
-import { useAuth } from '../../context/auth'
-import { Outlet } from "react-router-dom"
-import axios from 'axios'
-import Spinner from '../Spinner'
-
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../context/auth';
+import { Outlet } from "react-router-dom";
+import Spinner from '../Spinner';
 
 const AdminRoute = () => {
-    const [ok, setOk] = useState(false)
-    const [auth, setAuth] = useAuth()
+    const [ok, setOk] = useState(false);
+    const [auth, setAuth] = useAuth();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // console.log("Token in adminroute:", auth?.token);
         const authCheck = async () => {
-            const res = await axios.get("http://localhost:8080/api/v1/auth/admin-auth", {
-                headers: {
-                    Authorization: auth?.token
-                }
-            })
+            try {
+                const response = await fetch("http://localhost:8080/api/v1/auth/admin-auth", {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${auth?.token}`
+                    }
+                });
 
-            if (res.data.ok) {
-                setOk(true)
-            } else {
-                setOk(false)
+                // console.log("Request Headers:", response.headers);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.ok) {
+                        setOk(true);
+                    } else {
+                        setOk(false);
+                    }
+                } else {
+                    setOk(false);
+                }
+            } catch (error) {
+                console.error("Error checking admin authentication:", error);
+                setOk(false);
+            } finally {
+                // Set loading to false regardless of the result
+                setLoading(false);
             }
-        }
+        };
 
         if (auth?.token) {
-            authCheck()
+            authCheck();
         }
+    }, [auth?.token]);
 
-    }, [auth?.token])
+    return loading ? <Spinner /> : ok ? <Outlet /> : <div>Access Denied</div>;
+};
 
-    return ok ? <Outlet /> : <Spinner/>
-}
-
-export default AdminRoute
+export default AdminRoute;

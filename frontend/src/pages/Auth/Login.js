@@ -28,7 +28,7 @@ const Login = () => {
                 })
 
                 localStorage.setItem("authData", JSON.stringify(res.data))
-                console.log("location state",location.state);
+                // console.log("location state",location.state);
 
                 navigate(location.state || "/")
             } else {

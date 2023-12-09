@@ -4,9 +4,9 @@ import AdminMenu from '../components/Layout/AdminMenu'
 import axios from 'axios'
 import { Select } from "antd"
 import { useAuth } from '../context/auth'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-const CreateProduct = () => {
+const UpdateProduct = () => {
     const [auth, setAuth] = useAuth();
     const [categories, setCategories] = useState([])
     const [name, setName] = useState("")
@@ -16,10 +16,36 @@ const CreateProduct = () => {
     const [quantity, setQuantity] = useState("")
     const [category, setCategory] = useState("")
     const [shipping, setShipping] = useState("")
-
+    const [id, setId] = useState("")
 
     const { Option } = Select
     const navigate = useNavigate()
+    const params = useParams()
+
+    //get simgle product
+    const getSingleProduct = async () => {
+        try {
+            const { data } = await axios.get(`http://localhost:8080/api/v1/product/single-product/${params.id}`)
+
+            if (data?.success) {
+                setName(data.product.name)
+                setDescription(data.product.description)
+                setId(data.product._id)
+                setPrice(data.product.price)
+                setQuantity(data.product.quantity)
+                setCategory(data.product.category._id)
+                setShipping(data.product.shipping)
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
+    useEffect(() => {
+        getSingleProduct()
+    }, [])
+
     //getAll Categories
     const getAllCategory = async () => {
         try {
@@ -29,7 +55,6 @@ const CreateProduct = () => {
                 setCategories(data.categories)
                 // console.log(data);
             }
-
         } catch (error) {
             console.log(error);
             alert(error)
@@ -41,29 +66,19 @@ const CreateProduct = () => {
     }, [])
 
     //handleCreateProduct
-    const handleCreateProduct = async (e) => {
+    const handleUpdateProduct = async (e) => {
         e.preventDefault()
-        const form = e.target.closest('form');
 
-        // Check form validity
-        if (!form.checkValidity()) {
-            // If the form is not valid, trigger HTML5 validation messages
-            form.reportValidity();
-            return;
-        }
         try {
             const productData = new FormData()
             productData.append("name", name)
             productData.append("description", description)
             productData.append("price", price)
-            productData.append("photo", photo)
+            photo && productData.append("photo", photo)
             productData.append("quantity", quantity)
             productData.append("category", category)
 
-
-            console.log("productData", productData);
-
-            const { data } = await axios.post(`http://localhost:8080/api/v1/product/create-product`, productData,
+            const { data } = await axios.put(`http://localhost:8080/api/v1/product//update-product/${id}`, productData,
                 {
                     headers: {
                         Authorization: `Bearer ${auth?.token}`
@@ -73,24 +88,36 @@ const CreateProduct = () => {
                 console.log(data.message);
                 alert(data.message);
                 navigate("/dashboard/admin/products")
-
             } else {
-                alert(data.error || "Something Went Wrong While Creating New Product!!");
+                alert(data.error || "Something Went Wrong While Updating New Product!!");
             }
 
         } catch (error) {
             console.log(error);
-            alert("Something Went Wrong While Creating New Product!!")
+            alert("Something Went Wrong While Updating New Product!!")
         }
 
-        //form empty
-        setName("")
-        setDescription("")
-        setPrice("")
-        setPhoto("")
-        setCategory("")
-        setQuantity("")
     }
+
+    //handleDeleteProduct
+    const handleDeleteProduct = async () => {
+        try {
+            const { data } = await axios.delete(`http://localhost:8080/api/v1/product//delete-product/${id}`)
+
+            if (data?.success) {
+                alert(data.message)
+                navigate("/dashboard/admin/products")
+            } else {
+                alert(data.message)
+            }
+
+        } catch (error) {
+            console.log(error);
+            alert("Something Went Wrong while Deleting Product!!")
+
+        }
+    }
+
 
     return (
         <Layout>
@@ -100,7 +127,7 @@ const CreateProduct = () => {
                         <AdminMenu />
                     </div>
                     <div className="col-md-9">
-                        <h3>Create new product</h3>
+                        <h3>Update Product</h3>
 
                         <form>
                             <div className="m-1 w-70">
@@ -110,6 +137,7 @@ const CreateProduct = () => {
                                     size='large'
                                     showSearch
                                     className='form-select mb-3'
+                                    value={category}
                                     onChange={(value) => { setCategory(value) }}
                                 >
                                     {
@@ -125,7 +153,7 @@ const CreateProduct = () => {
                                         {photo ? photo.name : "Upload Product Image"}
                                         <input
                                             type="file"
-                                            name='photo'
+
                                             accept="image/*"
                                             hidden
                                             required
@@ -134,9 +162,16 @@ const CreateProduct = () => {
                                     </label>
                                 </div>
                                 <div className="mb-3 text-center">
-                                    {photo && (
+                                    {photo ? (
                                         <img
                                             src={URL.createObjectURL(photo)}
+                                            alt='Product Image'
+                                            height={"200px"}
+                                            className='img img-responsive'
+                                        />
+                                    ) : (
+                                        <img
+                                            src={`http://localhost:8080/api/v1/product/product-photo/${id}`}
                                             alt='Product Image'
                                             height={"200px"}
                                             className='img img-responsive'
@@ -195,7 +230,8 @@ const CreateProduct = () => {
                                         size='large'
                                         showSearch
                                         className='form-control mb-3'
-                                        onChange={(value) => { setShipping(value) }}
+                                        onChange={(value) => { setShipping(value === "0" ? true : false) }}
+                                        value={shipping ? "0" : "1"}
                                     >
                                         <Option value="0">Yes</Option>
                                         <Option value="1">No</Option>
@@ -203,8 +239,13 @@ const CreateProduct = () => {
                                 </div>
 
                                 <div className="mb-3">
-                                    <button type="submit" className='btn btn-primary' onClick={handleCreateProduct}>Create new Product</button>
+                                    <button type="submit" className='btn btn-primary' onClick={handleUpdateProduct}>Update Product</button>
                                 </div>
+
+                                <div className="mb-3">
+                                    <button type="submit" className='btn btn-danger' onClick={handleDeleteProduct}>Delete Product</button>
+                                </div>
+
                             </div>
                         </form>
 
@@ -216,4 +257,4 @@ const CreateProduct = () => {
     )
 }
 
-export default CreateProduct
+export default UpdateProduct
