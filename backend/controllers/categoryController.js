@@ -84,7 +84,7 @@ const singleCategoryController = async (req, res) => {
     try {
         const { id } = req.params
         //we can do it by using id instead of slug
-        const category = await categoryModel.findOne({ _id:id })
+        const category = await categoryModel.findOne({ _id: id })
         res.status(200).send({
             success: true,
             message: "Recieved Single Category",
@@ -127,5 +127,6 @@ module.exports = {
     updateCategoryController,
     categoryController,
     singleCategoryController,
-    deleteCategoryController
+    deleteCategoryController,
+    
 }

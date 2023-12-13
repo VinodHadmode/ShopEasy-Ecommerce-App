@@ -1,11 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-
-
 const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
-
     const [auth, setAuth] = useState({
         user: null,
         token: ""
@@ -30,12 +27,9 @@ const AuthProvider = ({ children }) => {
     )
 }
 
-
 //custom hook
-
 const useAuth = () => {
     return useContext(AuthContext)
 }
-
 
 export { useAuth, AuthProvider }

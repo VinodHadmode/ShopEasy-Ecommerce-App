@@ -2,11 +2,18 @@ import React from 'react'
 import { NavLink, Link } from "react-router-dom"
 import { RiShoppingBag2Line } from "react-icons/ri";
 import { useAuth } from '../../context/auth';
+import SearchInput from '../Form/SearchInput';
+import useCategory from '../../hooks/useCategory';
+import { useCart } from '../../context/cart';
 
 
 const Header = () => {
 
     const [auth, setAuth] = useAuth()
+
+    const categories = useCategory()
+    const [cart, setCart] = useCart()
+
 
     const handleLogout = () => {
         setAuth({
@@ -34,12 +41,32 @@ const Header = () => {
                         </Link>
 
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <SearchInput />
                             <li className="nav-item">
                                 <NavLink to="/" className="nav-link" aria-current="page" >Home</NavLink>
                             </li>
 
-                            <li className="nav-item">
-                                <NavLink to="/category" className="nav-link" aria-current="page">Category</NavLink>
+                            <li className="nav-item dropdown">
+                                <Link
+                                    className="nav-link dropdown-toggle"
+                                    data-bs-toggle="dropdown"
+                                >
+                                    Category
+                                </Link>
+                                <ul className="dropdown-menu">
+                                    <li>
+                                        <Link to={`/categories`} className="dropdown-item">All Categories</Link>
+                                    </li>
+                                    {
+                                        categories?.map((c) => {
+                                            return (
+                                                <li key={c._id}>
+                                                    <Link to={`/category/${c.slug}`} className="dropdown-item">{c.name}</Link>
+                                                </li>
+                                            )
+                                        })
+                                    }
+                                </ul>
                             </li>
 
                             {!auth.user ? (
@@ -62,7 +89,7 @@ const Header = () => {
                                         </NavLink>
                                         <ul className="dropdown-menu">
                                             <li>
-                                                <NavLink to={`/dashboard/${auth?.user?.role ===1 ? "admin" : "user"}`} className="dropdown-item" >Dashboard</NavLink>
+                                                <NavLink to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`} className="dropdown-item" >Dashboard</NavLink>
                                             </li>
 
                                             <li className="dropdown-item">
@@ -77,12 +104,8 @@ const Header = () => {
                                 </>
                             )}
 
-
-
-
-
                             <li className="nav-item">
-                                <NavLink to="/cart" className="nav-link" >Cart(0)</NavLink>
+                                <NavLink to="/cart" className="nav-link" >Cart({cart.length})</NavLink>
                             </li>
 
                         </ul>

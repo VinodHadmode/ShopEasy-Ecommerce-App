@@ -38,7 +38,6 @@ const Signup = () => {
         <Layout>
             <div className="signup">
                 <h1>Signup Page</h1> <br />
-
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <input
@@ -100,7 +99,7 @@ const Signup = () => {
                         />
                     </div>
 
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-primary">Sign Up</button>
                 </form>
 
             </div>

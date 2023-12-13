@@ -37,7 +37,7 @@ const Products = () => {
 
                 <div className="col-md-9">
                     <h2 className="text-center">All Products</h2>
-                    <div className="d-flex">
+                    <div className="d-flex flex-wrap">
                         {
                             products?.map((p) => {
                                 return <Link
@@ -49,7 +49,8 @@ const Products = () => {
                                         <img src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} />
                                         <div className="card-body">
                                             <h5 className="card-title">{p.name}</h5>
-                                            <p className="card-text">{p.description}</p>
+                                            <p className="card-text">${p.price}</p>
+                                            <p className="card-text">{p.description.substring(0,50)}...</p>
                                         </div>
                                     </div>
                                 </Link>
