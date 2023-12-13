@@ -1,9 +1,21 @@
 const { default: slugify } = require("slugify");
 const { productModel } = require("../models/productModel");
-const fs = require("fs")
+const fs = require("fs");
+const { categoryModel } = require("../models/categoryModel");
+const braintree = require("braintree");
+const dotenv = require("dotenv");
+const { orderModel } = require("../models/orderModel");
+
+//payment gateway
+const gateway = new braintree.BraintreeGateway({
+    environment: braintree.Environment.Sandbox,
+    merchantId: process.env.BRAINTREE_MERCHANT_ID,
+    publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+    privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 
 
-const createProductController = async (req,res) => {
+const createProductController = async (req, res) => {
     try {
         const { name, slug, description, price, category, quantity, shipping } = req.fields
         // const { photo } = req.files
@@ -93,7 +105,7 @@ const getSingleProductController = async (req, res) => {
 }
 
 //productPhotoController
-const productPhotoController = async (req,res) => {
+const productPhotoController = async (req, res) => {
     try {
         const { pid } = req.params
         const products = await productModel.findById(pid).select("photo")
@@ -114,7 +126,7 @@ const productPhotoController = async (req,res) => {
 
 
 //productDeleteController
-const productDeleteController = async (req,res) => {
+const productDeleteController = async (req, res) => {
     try {
         const { pid } = req.params
         const productTobeDeleted = await productModel.findByIdAndDelete(pid).select("-photo")
@@ -135,7 +147,7 @@ const productDeleteController = async (req,res) => {
 }
 
 //updateProductController
-const updateProductController = async (req,res) => {
+const updateProductController = async (req, res) => {
     try {
         const { name, slug, description, price, category, quantity, shipping } = req.fields
         const { photo } = req.files
@@ -182,16 +194,228 @@ const updateProductController = async (req,res) => {
         console.log(error);
         res.status(400).send({
             success: false,
-            message: "Error while updatin product",
+            message: "Error while updating product",
             error
         })
     }
 }
+
+//productFilterController
+const productFilterController = async (req, res) => {
+    try {
+        const { checked, radio } = req.body
+
+        const queries = {}
+        if (checked.length > 0) {
+            queries.category = checked
+        }
+        if (radio.length) {
+            queries.price = { $gte: radio[0], $lte: radio[1] }
+        }
+
+        const filteredProducts = await productModel.find(queries)
+
+        res.status(200).send({
+            success: true,
+            filteredProducts
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while Filtering product",
+            error
+        })
+    }
+}
+
+//productCountController
+const productCountController = async (req, res) => {
+    try {
+        const totalCount = await productModel.find({}).estimatedDocumentCount()
+        res.status(200).send({
+            success: true,
+            totalCount
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while counting product",
+            error
+        })
+    }
+}
+
+//productListController
+const productListController = async (req, res) => {
+    try {
+        const perPage = 5
+        const page = req.params.page ? req.params.page : 1
+
+        const products = await productModel.find({}).select("-photo").skip((page - 1) * perPage).limit(perPage).sort({ createdAt: -1 })
+
+        res.status(200).send({
+            success: true,
+            products
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while getting product list",
+            error
+        })
+    }
+}
+
+//searchProductController
+const searchProductController = async (req, res) => {
+    try {
+        const { keywords } = req.params
+        const result = await productModel.find({
+            $or: [
+                { name: { $regex: keywords, $options: "si" } },
+                { description: { $regex: keywords, $options: "si" } }
+            ]
+        }).select("-photo")
+
+        res.status(200).send({
+            success: true,
+            result
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while Searching product",
+            error
+        })
+    }
+}
+
+//relatedProductController
+const relatedProductController = async (req, res) => {
+    try {
+        const { pid, cid } = req.params
+        const similarProducts = await productModel
+            .find({ category: cid, _id: { $ne: pid } })
+            .select("-photo")
+            .limit(5)
+            .populate("category")
+
+        res.status(200).send({
+            success: true,
+            similarProducts
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while Searching product",
+            error
+        })
+    }
+}
+
+//productCategoryController
+const productCategoryController = async (req, res) => {
+    try {
+        const { slug } = req.params
+        const category = await categoryModel.findOne({ slug })
+        const products = await productModel.find({ category }).populate("category")
+
+        res.status(200).send({
+            success: true,
+            category,
+            products
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while getting category wise product",
+            error
+        })
+    }
+}
+
+//braintreeTokenController
+const braintreeTokenController = async (req, res) => {
+    try {
+        gateway.clientToken.generate({}, (err, response) => {
+            if (err) {
+                res.status(400).send(err)
+            } else {
+                res.status(200).send({
+                    success: true,
+                    response
+                })
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+//braintreePaymentController
+const braintreePaymentController = async(req,res) => {
+    try {
+        const { cart, nonce } = req.body
+        let total = 0
+        cart?.map((c) => {
+            return total = total + c.price
+        })
+
+        let transaction = gateway.transaction.sale({
+            amount: total,
+            paymentMethodNonce: nonce,
+            options: {
+                submitForSettlement: true
+            }
+        }, (err, result) => {
+            if (result) {
+                const order = new orderModel({
+                    products: cart,
+                    payment: result,
+                    buyer: req.user._id,
+                }).save()
+
+                res.status(200).send({
+                    success: true
+                })
+            } else {
+                res.status(400).send({
+                    success: false,
+                    err
+                })
+            }
+        });
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     createProductController,
     getProductController,
     getSingleProductController,
     productPhotoController,
     productDeleteController,
-    updateProductController
+    updateProductController,
+    productFilterController,
+    productCountController,
+    productListController,
+    searchProductController,
+    relatedProductController,
+    productCategoryController,
+    braintreeTokenController,
+    braintreePaymentController
 }

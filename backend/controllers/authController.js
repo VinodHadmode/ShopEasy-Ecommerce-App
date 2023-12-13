@@ -1,4 +1,5 @@
 const { hashPassword, comparePassword } = require("../helpers/authHelpers")
+const { orderModel } = require("../models/orderModel")
 const { userModel } = require("../models/userModel")
 const jwt = require("jsonwebtoken")
 
@@ -78,7 +79,7 @@ const loginController = async (req, res) => {
                 email: user.email,
                 phone: user.phone,
                 address: user.address,
-                role:user.role
+                role: user.role
             },
             token: token
         })
@@ -98,6 +99,123 @@ const testController = (req, res) => {
     res.send("Accessed by only admin Protected routes")
 }
 
+//updateProfileController
+const updateProfileController = async (req, res) => {
+    try {
+        const { name, password, phone, address } = req.body
+        const user = await userModel.findById(req.user._id)
+
+        if (password && password.length < 6) {
+            return res.json({ error: "6 Character long password required!!" })
+        }
+
+        const hashedPassword = password ? hashPassword(password) : undefined
+
+        const updatedUser = await userModel
+            .findByIdAndUpdate(req.user._id, {
+                name: name || user.name,
+                password: hashedPassword || user.password,
+                phone: phone || user.phone,
+                address: address || user.address,
+            },
+                { new: true }
+            )
+        res.status(200).send({
+            success: true,
+            message: "Profile updated successfully!!",
+            updatedUser
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while updating user profile",
+            error
+        })
+    }
+}
+
+//getOrdersController
+const getOrdersController = async (req, res) => {
+    try {
+        const orders = await orderModel
+            .find({ buyer: req.user._id })
+            .populate("products", "-photo")
+            .populate("buyer", "name")
+
+        res.status(200).send({
+            success: true,
+            message: "Recieved orders successfully!!",
+            orders
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while getting orders",
+            error
+        })
+    }
+}
+
+//getAllOrdersController
+const getAllOrdersController = async (req, res) => {
+    try {
+        const orders = await orderModel
+            .find({})
+            .populate("products", "-photo")
+            .populate("buyer", "name")
+            .sort({ createdAt: -1 })
+
+        res.status(200).send({
+            success: true,
+            message: "Recieved All orders successfully!!",
+            orders
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while getting orders",
+            error
+        })
+
+    }
+}
+
+//orderStatusController
+const orderStatusController = async (req, res) => {
+    try {
+        const { orderId } = req.params
+        const { status } = req.body
+
+        const orders = await orderModel.findByIdAndUpdate(orderId, { status }, { new: true })
+        res.status(200).send({
+            success: true,
+            message: "Updated order status successfully!!",
+            orders
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while updating orders",
+            error
+        })
+    }
+}
+
 module.exports = {
-    registerController, loginController, testController
+    registerController,
+    loginController,
+    testController,
+    updateProfileController,
+    getOrdersController,
+    getAllOrdersController,
+    orderStatusController
 }

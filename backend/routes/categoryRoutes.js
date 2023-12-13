@@ -1,6 +1,6 @@
 const express = require("express")
 const { requireSignIn, isAdmin } = require("../middlewares/authMiddleware")
-const { createCategoryController, updateCategoryController, categoryController, singleCategoryController, deleteCategoryController } = require("../controllers/categoryController")
+const { createCategoryController, updateCategoryController, categoryController, singleCategoryController, deleteCategoryController, productCategoryController } = require("../controllers/categoryController")
 
 //category router
 const categoryRouter = express.Router()
@@ -20,8 +20,6 @@ categoryRouter.get("/single-category/:id",singleCategoryController)
 
 //5. delete category
 categoryRouter.delete("/delete-category/:id",requireSignIn,isAdmin,deleteCategoryController)
-
-
 
 module.exports = {
     categoryRouter
