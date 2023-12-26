@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import DropIn from 'braintree-web-drop-in-react';
 import axios from 'axios';
 import { message } from 'antd';
+import { BASE_URL } from '../Helpers/helper';
 
 
 const CartPage = () => {
@@ -64,7 +65,7 @@ const CartPage = () => {
     // getClientToken
     const getClientToken = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:8080/api/v1/product/braintree/token`);
+            const { data } = await axios.get(`${BASE_URL}/api/v1/product/braintree/token`);
             setClientToken(data?.response?.clientToken);
         } catch (error) {
             console.log(error);
@@ -78,7 +79,7 @@ const CartPage = () => {
             setLoading(true);
             const { nonce } = await instance.requestPaymentMethod();
             const { data } = await axios.post(
-                `http://localhost:8080/api/v1/product/braintree/payment`,
+                `${BASE_URL}/api/v1/product/braintree/payment`,
                 { nonce, cart },
                 {
                     headers: {
@@ -127,7 +128,7 @@ const CartPage = () => {
                                 <div className="row mb-2 p-3 card flex-row" key={p._id}>
                                     <div className="col-md-4 border rounded">
                                         <img
-                                            src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                                            src={`${BASE_URL}/api/v1/product/product-photo/${p._id}`}
                                             className="card-img-top"
                                             alt={p.name}
                                         />

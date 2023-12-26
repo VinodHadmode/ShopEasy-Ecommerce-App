@@ -4,21 +4,19 @@ import Layout from '../components/Layout/Layout';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/cart';
 import { message } from 'antd';
-
+import { BASE_URL } from '../Helpers/helper';
 
 const Search = () => {
   const [values, setValues] = useSearch()
   const [cart, setCart] = useCart()
   const navigate = useNavigate()
 
-  
   //handleCart
   const handleCart = (prod) => {
     setCart([...cart, prod])
     localStorage.setItem("cartProduct", JSON.stringify([...cart, prod]))
     message.success(`Item added to cart!!`)
   }
-
 
   return (
     <Layout>
@@ -34,7 +32,7 @@ const Search = () => {
               <div className="col" key={p._id}>
                 <div className="card" style={{ width: "18rem" }}>
                   <img
-                    src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                    src={`${BASE_URL}/api/v1/product/product-photo/${p._id}`}
                     className="card-img-top"
                     alt={p.name}
                     style={{ objectFit: 'cover', height: '200px' }}

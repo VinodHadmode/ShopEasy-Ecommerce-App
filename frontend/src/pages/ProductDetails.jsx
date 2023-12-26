@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useCart } from '../context/cart'
 import { message } from 'antd';
-
+import { BASE_URL } from '../Helpers/helper'
 
 const ProductDetails = () => {
     const [product, setProduct] = useState({})
@@ -17,7 +17,7 @@ const ProductDetails = () => {
     //getSingleProduct
     const getSingleProduct = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:8080/api/v1/product/single-product/${params.id}`)
+            const { data } = await axios.get(`${BASE_URL}/api/v1/product/single-product/${params.id}`)
             setProduct(data?.product)
             getrelatedProducts(data?.product?._id, data?.product?.category._id)
         } catch (error) {
@@ -28,7 +28,7 @@ const ProductDetails = () => {
     //getrelatedProducts
     const getrelatedProducts = async (pid, cid) => {
         try {
-            const { data } = await axios.get(`http://localhost:8080/api/v1/product/related-products/${pid}/${cid}`)
+            const { data } = await axios.get(`${BASE_URL}/api/v1/product/related-products/${pid}/${cid}`)
             setReleatedProducts(data?.similarProducts)
 
         } catch (error) {
@@ -54,7 +54,7 @@ const ProductDetails = () => {
                     <div className="col-md-6 card product-image">
                         {product._id && (
                             <img
-                                src={`http://localhost:8080/api/v1/product/product-photo/${product._id}`}
+                                src={`${BASE_URL}/api/v1/product/product-photo/${product._id}`}
                                 className="card-img-top  mx-auto d-block"
                                 alt={product.name}
                                 style={{ height: "300px", width: "auto", maxWidth: "100%" }}
@@ -82,7 +82,7 @@ const ProductDetails = () => {
                             <div className="col" key={p._id}>
                                 <div className="card" style={{ width: "18rem" }}>
                                     <img
-                                        src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                                        src={`${BASE_URL}/api/v1/product/product-photo/${p._id}`}
                                         className="card-img-top"
                                         alt={p.name}
                                         style={{ objectFit: 'cover', height: '200px' }}

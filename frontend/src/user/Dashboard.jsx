@@ -10,7 +10,7 @@ const Dashboard = () => {
     <Layout>
       <div className="container-fluid mt-4">
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-md-4 mt-3">
             <UserMenu />
           </div>
           <div className="col-md-7">

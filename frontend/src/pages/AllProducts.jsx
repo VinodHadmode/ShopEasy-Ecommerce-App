@@ -6,6 +6,7 @@ import { Prices } from '../components/Prices'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/cart'
 import { message } from 'antd';
+import { BASE_URL } from '../Helpers/helper'
 
 
 const AllProducts = () => {
@@ -26,7 +27,7 @@ const AllProducts = () => {
   //getAll categories
   const getAllCategory = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/v1/category/get-category`)
+      const res = await axios.get(`${BASE_URL}/api/v1/category/get-category`)
 
       if (res.data) {
         setCategories(res.data.categories)
@@ -38,13 +39,11 @@ const AllProducts = () => {
     }
   }
 
-
-
   //gettAllProducts
   const getAllProducts = async () => {
     try {
       setLoading(true)
-      const { data } = await axios.get(`http://localhost:8080/api/v1/product/product-list/${page}`)
+      const { data } = await axios.get(`${BASE_URL}/api/v1/product/product-list/${page}`)
 
       if (data?.success) {
         setProducts(data.products)
@@ -66,7 +65,7 @@ const AllProducts = () => {
       console.log("Checked:", checked);
       console.log("Radio:", radio);
 
-      const { data } = await axios.post(`http://localhost:8080/api/v1/product/filter-product`, { checked, radio })
+      const { data } = await axios.post(`${BASE_URL}/api/v1/product/filter-product`, { checked, radio })
 
       if (data?.success) {
         setProducts(data.filteredProducts)
@@ -79,7 +78,7 @@ const AllProducts = () => {
   //getTotal product count
   const getTotalProductCount = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8080/api/v1/product/count-product`)
+      const { data } = await axios.get(`${BASE_URL}/api/v1/product/count-product`)
       if (data?.success) {
         setTotal(data.totalCount)
       }
@@ -94,7 +93,7 @@ const AllProducts = () => {
   const loadMoreProducts = async () => {
     try {
       setLoading(true)
-      const { data } = await axios.get(`http://localhost:8080/api/v1/product/product-list/${page}`)
+      const { data } = await axios.get(`${BASE_URL}/api/v1/product/product-list/${page}`)
 
       if (data?.success) {
         setProducts([...products, ...data?.products])
@@ -200,7 +199,7 @@ const AllProducts = () => {
                 <div className="col" key={p._id}>
                   <div className="card h-100">
                     <img
-                      src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                      src={`${BASE_URL}/api/v1/product/product-photo/${p._id}`}
                       className="card-img-top"
                       alt={p.name}
                       style={{ objectFit: 'cover', height: '200px' }}

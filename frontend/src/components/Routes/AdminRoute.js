@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/auth';
 import { Outlet } from "react-router-dom";
 import Spinner from '../Spinner';
+import { BASE_URL } from '../../Helpers/helper';
 
 const AdminRoute = () => {
     const [ok, setOk] = useState(false);
@@ -11,7 +12,7 @@ const AdminRoute = () => {
     useEffect(() => {
         const authCheck = async () => {
             try {
-                const response = await fetch("http://localhost:8080/api/v1/auth/admin-auth", {
+                const response = await fetch(`${BASE_URL}/api/v1/auth/admin-auth`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${auth?.token}`

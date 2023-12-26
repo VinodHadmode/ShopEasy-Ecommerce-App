@@ -6,6 +6,8 @@ import axios from 'axios'
 import moment from "moment"
 import { Select } from 'antd';
 import { Option } from 'antd/es/mentions'
+import {BASE_URL} from "../Helpers/helper"
+
 
 const AdminOrders = () => {
     const [status, setStatus] = useState(["Not Process", "Processing", "Shipped", "Delivered", "Cancel"])
@@ -16,7 +18,7 @@ const AdminOrders = () => {
     //getAllOrders
     const getAllOrders = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:8080/api/v1/auth/all-orders`,
+            const { data } = await axios.get(`${BASE_URL}/api/v1/auth/all-orders`,
                 {
                     headers: {
                         Authorization: `Bearer ${auth?.token}`
@@ -32,7 +34,7 @@ const AdminOrders = () => {
     // handleOrderStatus
     const handleOrderStatus = async (orderId, value) => {
         try {
-            const { data } = await axios.put(`http://localhost:8080/api/v1/auth/order-status/${orderId}`, { status: value }, {
+            const { data } = await axios.put(`${BASE_URL}/api/v1/auth/order-status/${orderId}`, { status: value }, {
                 headers: {
                     Authorization: `Bearer ${auth?.token}`
                 }
@@ -107,7 +109,7 @@ const AdminOrders = () => {
                                                         <div className="row mb-2 p-3 card flex-row" key={p._id}>
                                                             <div className="col-md-4">
                                                                 <img
-                                                                    src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                                                                    src={`${BASE_URL}/api/v1/product/product-photo/${p._id}`}
                                                                     className="card-img-top"
                                                                     alt={p.name}
                                                                 />

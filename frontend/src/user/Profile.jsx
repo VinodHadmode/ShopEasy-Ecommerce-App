@@ -4,7 +4,7 @@ import UserMenu from '../components/Layout/UserMenu'
 import { useAuth } from '../context/auth'
 import axios from 'axios'
 import { message } from 'antd';
-
+import { BASE_URL } from '../Helpers/helper'
 
 const Profile = () => {
     const [name, setName] = useState("")
@@ -19,7 +19,7 @@ const Profile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const { data } = await axios.put(`http://localhost:8080/api/v1/auth/profile`,
+            const { data } = await axios.put(`${BASE_URL}/api/v1/auth/profile`,
                 { name, email, password, phone, address },
                 {
                     headers: {
@@ -57,7 +57,7 @@ const Profile = () => {
         <Layout>
             <div className="container-fluid mt-4">
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-4 mt-3">
                         <UserMenu />
                     </div>
                     <div className="col-md-7">

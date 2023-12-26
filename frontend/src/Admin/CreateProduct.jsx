@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Select,message } from "antd"
 import { useAuth } from '../context/auth'
 import { useNavigate } from 'react-router-dom'
+import { BASE_URL } from '../Helpers/helper'
 
 const CreateProduct = () => {
     const [auth, setAuth] = useAuth();
@@ -23,7 +24,7 @@ const CreateProduct = () => {
     //getAll Categories
     const getAllCategory = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:8080/api/v1/category/get-category`)
+            const { data } = await axios.get(`${BASE_URL}/api/v1/category/get-category`)
 
             if (data?.success) {
                 setCategories(data.categories)
@@ -61,7 +62,7 @@ const CreateProduct = () => {
 
             console.log("productData", productData);
 
-            const { data } = await axios.post(`http://localhost:8080/api/v1/product/create-product`, productData,
+            const { data } = await axios.post(`${BASE_URL}/api/v1/product/create-product`, productData,
                 {
                     headers: {
                         Authorization: `Bearer ${auth?.token}`

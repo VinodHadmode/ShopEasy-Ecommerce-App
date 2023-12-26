@@ -5,6 +5,7 @@ import axios from "axios"
 import CategoryForm from '../components/Form/CategoryForm'
 import { useAuth } from '../context/auth'
 import { Modal, message } from 'antd';
+import { BASE_URL } from '../Helpers/helper'
 
 const CreateCategory = () => {
     const [categories, setCategories] = useState([])
@@ -19,7 +20,7 @@ const CreateCategory = () => {
         e.preventDefault();
         try {
             const res = await axios.post(
-                `http://localhost:8080/api/v1/category/create-category`,
+                `${BASE_URL}/api/v1/category/create-category`,
                 { name },
                 {
                     headers: {
@@ -44,7 +45,7 @@ const CreateCategory = () => {
     //getAll categories
     const getAllCategory = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/api/v1/category/get-category`)
+            const res = await axios.get(`${BASE_URL}/api/v1/category/get-category`)
 
             if (res.data) {
                 setCategories(res.data.categories)
@@ -60,7 +61,6 @@ const CreateCategory = () => {
         getAllCategory()
     }, [])
 
-    //edit button working start
     //handleEditCategory
     const handleEditCategory = (category) => {
         setVisible(true)
@@ -72,7 +72,7 @@ const CreateCategory = () => {
     const handleUpdateSubmit = async (e) => {
         e.preventDefault()
         try {
-            const { data } = await axios.put(`http://localhost:8080/api/v1/category/update-category/${selected}`, { name: updatedName },
+            const { data } = await axios.put(`${BASE_URL}/api/v1/category/update-category/${selected}`, { name: updatedName },
                 {
                     headers: {
                         Authorization: `Bearer ${auth?.token}`
@@ -95,7 +95,7 @@ const CreateCategory = () => {
     //handleDeleteCategory
     const handleDeleteCategory = async (pID) => {
         try {
-            const { data } = await axios.delete(`http://localhost:8080/api/v1/category/delete-category/${pID}`, {
+            const { data } = await axios.delete(`${BASE_URL}/api/v1/category/delete-category/${pID}`, {
                 headers: {
                     Authorization: `Bearer ${auth?.token}`
                 }

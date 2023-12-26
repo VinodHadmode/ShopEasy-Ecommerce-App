@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useCart } from '../context/cart'
 import { message } from 'antd';
-
+import { BASE_URL } from '../Helpers/helper'
 
 const CategoryProduct = () => {
     const [catWiseProduct, setCatWiseProduct] = useState([])
@@ -17,7 +17,7 @@ const CategoryProduct = () => {
     //getCatWiseProduct
     const getCatWiseProduct = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:8080/api/v1/product/product-category/${params.slug}`)
+            const { data } = await axios.get(`${BASE_URL}/api/v1/product/product-category/${params.slug}`)
             setCatWiseProduct(data?.products)
             setCategory(data?.category)
         } catch (error) {
@@ -42,14 +42,14 @@ const CategoryProduct = () => {
                 <h5 className="text-center">Category : {category?.name}</h5>
                 <h5 className="text-center">Results found : {catWiseProduct?.length} </h5>
 
-                <div className="container">
+                <div className="container mt-4">
                     <div className="row row-cols-1 row-cols-md-4 g-4">
                         {
                             catWiseProduct?.map((p) => (
                                 <div className="col" key={p._id}>
                                     <div className="card" style={{width: "18rem"}}>
                                         <img
-                                            src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                                            src={`${BASE_URL}/api/v1/product/product-photo/${p._id}`}
                                             className="card-img-top"
                                             alt={p.name}
                                             style={{ objectFit: 'cover', height: '200px' }}

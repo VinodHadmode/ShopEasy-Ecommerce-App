@@ -3,6 +3,7 @@ import AdminMenu from '../components/Layout/AdminMenu'
 import Layout from '../components/Layout/Layout'
 import axios from 'axios'
 import { Link, useNavigate } from "react-router-dom"
+import { BASE_URL } from '../Helpers/helper'
 
 const Products = () => {
     const [products, setProducts] = useState([])
@@ -12,7 +13,7 @@ const Products = () => {
     //getAllProducts API
     const getAllProducts = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:8080/api/v1/product/get-product`)
+            const { data } = await axios.get(`${BASE_URL}/api/v1/product/get-product`)
 
             if (data?.success) {
                 setProducts(data.products)
@@ -51,7 +52,7 @@ const Products = () => {
                                         <div className="col">
                                             <div className="card h-100">
                                                 <img
-                                                    src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                                                    src={`${BASE_URL}/api/v1/product/product-photo/${p._id}`}
                                                     className="card-img-top"
                                                     alt={p.name}
                                                     style={{ objectFit: 'cover', height: '200px' }}

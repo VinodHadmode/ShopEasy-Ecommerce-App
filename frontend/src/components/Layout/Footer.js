@@ -1,5 +1,5 @@
 import React from 'react'
-import GAStore from "/Users/HP/Desktop/Project-1/frontend/src/Images/GAStore.png"
+import GAStore from "../../Images/GAStore.png"
 
 const Footer = () => {
     return (

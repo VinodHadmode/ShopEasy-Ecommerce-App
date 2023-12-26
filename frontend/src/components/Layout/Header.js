@@ -1,12 +1,11 @@
 import React from 'react'
 import { NavLink, Link } from "react-router-dom"
 import { PiHandbagThin } from "react-icons/pi";
-import { SlUser } from "react-icons/sl";
 import { useAuth } from '../../context/auth';
 import SearchInput from '../Form/SearchInput';
 import useCategory from '../../hooks/useCategory';
 import { useCart } from '../../context/cart';
-import ShopEasyLogo from "/Users/HP/Desktop/Project-1/frontend/src/Images/ShopEasyLogo.png"
+import ShopEasyLogo from "../../Images/ShopEasyLogo.png"
 import { Badge,message } from 'antd';
 
 const Header = () => {
@@ -24,7 +23,6 @@ const Header = () => {
 
         localStorage.removeItem("authData")
         message.success("Logged out Successfully!!")
-        
     }
 
 

@@ -3,8 +3,9 @@ import Layout from '../../components/Layout/Layout'
 import "../Auth/Signup.css"
 import axios from "axios"
 import { useNavigate,Link } from "react-router-dom"
-import Loginbanner from "/Users/HP/Desktop/Project-1/frontend/src/Images/Login.jpg"
+import Loginbanner from "../../Images/Login.jpg"
 import { message } from 'antd';
+import {BASE_URL} from "../../Helpers/helper"
 
 
 const Signup = () => {
@@ -22,7 +23,7 @@ const Signup = () => {
         e.preventDefault()
         try {
 
-            const res = await axios.post(`http://localhost:8080/api/v1/auth/register`, { name, email, password, phone, address })
+            const res = await axios.post(`${BASE_URL}/api/v1/auth/register`, { name, email, password, phone, address })
             if (res.data.success) {
                 message.success(res.data.message)
                 navigate("/login")

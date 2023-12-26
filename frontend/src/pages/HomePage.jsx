@@ -4,8 +4,6 @@ import "../pages/HomePage.css"
 import { Link } from "react-router-dom"
 //importing images
 import Flat500off from "../Images/Flat500off.jpg"
-import HPDiwaliSale from "../Images/HPDiwaliSale.jpg"
-import Pnf from "../Images/Pnf.png"
 
 import HPSaveOnSale from "../Images/HPSaveOnSale.jpg"
 import CrazyDealsHeading from "../Images/CrazyDealsHeading.jpg"

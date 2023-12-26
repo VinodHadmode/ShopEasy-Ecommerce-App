@@ -3,7 +3,7 @@ import { useAuth } from '../../context/auth'
 import { Outlet } from "react-router-dom"
 import axios from 'axios'
 import Spinner from '../Spinner'
-
+import { BASE_URL } from '../../Helpers/helper'
 
 const PrivateRoute = () => {
 
@@ -12,7 +12,7 @@ const PrivateRoute = () => {
 
     useEffect(() => {
         const authCheck = async () => {
-            const res = await axios.get("http://localhost:8080/api/v1/auth/user-auth", {
+            const res = await axios.get(`${BASE_URL}/api/v1/auth/user-auth`, {
                 headers: {
                     Authorization: `Bearer ${auth?.token}`
                 }

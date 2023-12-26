@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Select, message } from "antd"
 import { useAuth } from '../context/auth'
 import { useNavigate, useParams } from 'react-router-dom'
+import { BASE_URL } from '../Helpers/helper'
 
 const UpdateProduct = () => {
     const [auth, setAuth] = useAuth();
@@ -25,7 +26,7 @@ const UpdateProduct = () => {
     //get single product
     const getSingleProduct = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:8080/api/v1/product/single-product/${params.id}`)
+            const { data } = await axios.get(`${BASE_URL}/api/v1/product/single-product/${params.id}`)
 
             if (data?.success) {
                 setName(data.product.name)
@@ -48,7 +49,7 @@ const UpdateProduct = () => {
     //getAll Categories
     const getAllCategory = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:8080/api/v1/category/get-category`)
+            const { data } = await axios.get(`${BASE_URL}/api/v1/category/get-category`)
 
             if (data?.success) {
                 setCategories(data.categories)
@@ -76,7 +77,7 @@ const UpdateProduct = () => {
             productData.append("quantity", quantity)
             productData.append("category", category)
 
-            const { data } = await axios.put(`http://localhost:8080/api/v1/product//update-product/${id}`, productData,
+            const { data } = await axios.put(`${BASE_URL}/api/v1/product//update-product/${id}`, productData,
                 {
                     headers: {
                         Authorization: `Bearer ${auth?.token}`
@@ -99,7 +100,7 @@ const UpdateProduct = () => {
     //handleDeleteProduct
     const handleDeleteProduct = async () => {
         try {
-            const { data } = await axios.delete(`http://localhost:8080/api/v1/product//delete-product/${id}`)
+            const { data } = await axios.delete(`${BASE_URL}/api/v1/product//delete-product/${id}`)
 
             if (data?.success) {
                 message.success(data.message)
@@ -165,7 +166,7 @@ const UpdateProduct = () => {
                                         />
                                     ) : (
                                         <img
-                                            src={`http://localhost:8080/api/v1/product/product-photo/${id}`}
+                                            src={`${BASE_URL}/api/v1/product/product-photo/${id}`}
                                             alt='Product Image'
                                             height={"200px"}
                                             className='img img-responsive'
