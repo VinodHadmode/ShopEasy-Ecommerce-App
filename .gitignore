@@ -6,6 +6,9 @@ frontend/node_modules/
 # Ignore node_modules folder in the frontend
 backend/node_modules/
 
+# Ignore .env file in the backend
+backend/.env
+
 # Ignore any build artifacts
 build/
 dist/

@@ -109,15 +109,15 @@ const CartPage = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-md-12">
-                        <h3 className="text-center p-3 mb-1">
+                        <h4 className="text-center p-3 mb-1">
                             {`Hello, ${auth?.token && auth?.user?.name}`}
-                        </h3>
-                        <h4 className="text-center mb-5">
+                        </h4>
+                        <h5 className="text-center mb-5">
                             {cart.length > 0
                                 ? `You have ${cart.length} item${cart.length > 1 ? 's' : ''} in your cart 
                                 ${auth?.token ? '' : '- Please Login to checkout!!'}`
                                 : 'Your Cart is empty!!'}
-                        </h4>
+                        </h5>
                     </div>
                 </div>
                 <div className="row" style={{ display: 'flex', justifyContent: 'space-around' }}>

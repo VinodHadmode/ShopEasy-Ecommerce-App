@@ -7,7 +7,6 @@ const { productRouter } = require("./routes/productRoutes")
 
 const cors=require("cors")
  
-
 //configuration
 dotenv.config()
 
@@ -20,7 +19,6 @@ app.use(express.json())
 app.use("/api/v1/auth",authRouter)
 app.use("/api/v1/category",categoryRouter)
 app.use("/api/v1/product",productRouter)
-
 
 
 const PORT = process.env.PORT || 8080
