@@ -1,18 +1,40 @@
 import React from 'react'
-import { Link } from "react-router-dom"
+import GAStore from "/Users/HP/Desktop/Project-1/frontend/src/Images/GAStore.png"
 
 const Footer = () => {
     return (
-        <div className="footer">
-            <h4 className='text-center'>All right resereved &copy; Vinod Hadmode</h4>
-            <p className="text-center mt-3">
-                <Link to="/about">About</Link>
-                |
-                <Link to="/contact">Contact</Link>
-                |
-                <Link to="/policy">Policy</Link>
-            </p>
-        </div>
+        <footer className="text-bg-secondary p-3 mt-4">
+            <div className="container p-4">
+                <div className="row">
+                    <div className="col-md-4">
+                        <h5 style={{ cursor: 'pointer' }}>ONLINE SHOPPING</h5>
+                        <p style={{ cursor: 'pointer' }}>Men</p>
+                        <p style={{ cursor: 'pointer' }}>Women</p>
+                        <p style={{ cursor: 'pointer' }}>Kids</p>
+                        <p style={{ cursor: 'pointer' }}>Home & Living</p>
+                        <p style={{ cursor: 'pointer' }}>Beauty</p>
+                        <p style={{ cursor: 'pointer' }}>Gift Card</p>
+                        <p style={{ cursor: 'pointer' }}>Myntra Insider</p>
+                    </div>
+                    <div className="col-md-4">
+                        <h5 style={{ cursor: 'pointer' }}>CUSTOMER POLICIES</h5>
+                        <p style={{ cursor: 'pointer' }}>Contact Us</p>
+                        <p style={{ cursor: 'pointer' }}>FAQ</p>
+                        <p style={{ cursor: 'pointer' }}>T&C</p>
+                        <p style={{ cursor: 'pointer' }}>Term of Use</p>
+                        <p style={{ cursor: 'pointer' }}>Track Orders</p>
+                        <p style={{ cursor: 'pointer' }}>Shipping</p>
+                        <p style={{ cursor: 'pointer' }}>Cancellation</p>
+                    </div>
+                    <div className="col-md-4">
+                        <h5>EXPERIENCE MYNTRA APP ON MOBILE</h5>
+                        <img src={GAStore} alt="Save On Sale" className="img-fluid w-50" />
+                    </div>
+                </div>
+                <hr className="my-4" />
+                <p className="text-center">&copy; 2023 www.myntra.com All rights reserved.</p>
+            </div>
+        </footer>
     )
 }
 

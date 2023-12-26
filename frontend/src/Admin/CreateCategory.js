@@ -4,7 +4,7 @@ import AdminMenu from '../components/Layout/AdminMenu'
 import axios from "axios"
 import CategoryForm from '../components/Form/CategoryForm'
 import { useAuth } from '../context/auth'
-import { Modal, Button } from 'antd';
+import { Modal, message } from 'antd';
 
 const CreateCategory = () => {
     const [categories, setCategories] = useState([])
@@ -27,18 +27,15 @@ const CreateCategory = () => {
                     }
                 }
             );
-            // console.log("res.data", res.data);
-
             if (res.data?.success) {
-                alert(`${res.data.message}`);
+                message.success(`${res.data.message}`);
                 getAllCategory();
             } else {
-                // Handle the case where the category already exists
-                alert(`${res.data.message}`);
+                message.error(`${res.data.message}`);
             }
         } catch (error) {
             console.log(error);
-            alert(`Something Went Wrong while creating category!!`);
+            message.error(`Something Went Wrong while creating category!!`);
         }
 
         setName("")
@@ -51,12 +48,11 @@ const CreateCategory = () => {
 
             if (res.data) {
                 setCategories(res.data.categories)
-                // console.log(res.data);
             }
 
         } catch (error) {
             console.log(error);
-            alert(error)
+            message.error(error)
         }
     }
 
@@ -67,7 +63,6 @@ const CreateCategory = () => {
     //edit button working start
     //handleEditCategory
     const handleEditCategory = (category) => {
-        // { setVisible(true); setUpdatedName(category.name) }
         setVisible(true)
         setUpdatedName(category.name)
         setSelected(category._id)
@@ -83,11 +78,8 @@ const CreateCategory = () => {
                         Authorization: `Bearer ${auth?.token}`
                     }
                 })
-
-            // console.log("res from update API call", data);
-
             if (data.success) {
-                alert(data.message)
+                message.success(data.message)
                 setSelected(null)
                 setUpdatedName("")
                 setVisible(false)
@@ -96,7 +88,7 @@ const CreateCategory = () => {
 
         } catch (error) {
             console.log(error);
-            alert("Something Went Wrong while Updating Category!!")
+            message.error("Something Went Wrong while Updating Category!!")
         }
     }
 
@@ -111,29 +103,28 @@ const CreateCategory = () => {
 
             if (data?.success) {
                 console.log(data.message);
-                alert(data.message)
+                message.success(data.message)
                 getAllCategory()
             }
 
-
         } catch (error) {
             console.log(error);
-            alert("Something Went Wrong while Deleting Category!!")
+            message.error("Something Went Wrong while Deleting Category!!")
         }
     }
 
     return (
         <Layout>
-            <div className="container-fluid m-3 p-3">
+            <div className="container-fluid mt-4">
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <AdminMenu />
                     </div>
-                    <div className="col-md-9">
+                    <div className="col-md-7">
                         <div className="p-3 w-50">
                             <CategoryForm handleSubmit={handleSubmit} value={name} setValue={setName} />
                         </div>
-                        <h3 className="mb-4">All Category</h3>
+                        <h4 className="text-center mb-4">ALL CATEGORIES</h4>
                         <div className="table-responsive">
                             <table className="table table-bordered table-hover">
                                 <thead className="thead-dark">
@@ -147,8 +138,8 @@ const CreateCategory = () => {
                                         <tr key={category._id}>
                                             <td>{category.name}</td>
                                             <td>
-                                                <button className="btn btn-primary ms-2" onClick={() => handleEditCategory(category)}>Edit</button>
-                                                <button className="btn btn-danger ms-2" onClick={() => { handleDeleteCategory(category._id) }}>Delete</button>
+                                                <button className="btn btn-outline-primary ms-2" onClick={() => handleEditCategory(category)}>Edit</button>
+                                                <button className="btn btn-outline-danger ms-2" onClick={() => { handleDeleteCategory(category._id) }}>Delete</button>
                                             </td>
                                         </tr>
                                     ))}

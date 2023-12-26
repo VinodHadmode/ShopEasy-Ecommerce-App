@@ -10,13 +10,11 @@ const Spinner = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCount((prev) => prev - 1)
-
         }, 1000)
 
         count === 0 && navigate("/login", {
             state: location.pathname
         })
-        // console.log("state:",location.pathname);
 
         return () => clearInterval(interval)
     }, [count, navigate, location])

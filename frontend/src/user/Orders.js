@@ -34,13 +34,13 @@ const Orders = () => {
 
     return (
         <Layout>
-            <div className="container-fluid m-3 p-3">
+            <div className="container-fluid mt-4">
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <UserMenu />
                     </div>
-                    <div className="col-md-9">
-                        <h1 className="text-center">All Orders</h1>
+                    <div className="col-md-7">
+                        <h4 className="text-center">All Orders</h4>
                         {
                             orders?.map((o, i) => {
                                 return (

@@ -3,6 +3,8 @@ import Layout from '../components/Layout/Layout'
 import UserMenu from '../components/Layout/UserMenu'
 import { useAuth } from '../context/auth'
 import axios from 'axios'
+import { message } from 'antd';
+
 
 const Profile = () => {
     const [name, setName] = useState("")
@@ -31,14 +33,14 @@ const Profile = () => {
                 ls = JSON.parse(ls)
                 ls.user = data?.updatedUser
                 localStorage.setItem("authData", JSON.stringify(ls))
-                alert("Profile Updated Successfully!!")
+                message.success("Profile Updated Successfully!!")
 
             } else {
-                alert(data?.error)
+                message.error(data?.error)
             }
         } catch (error) {
             console.log(error);
-            alert(error)
+            message.error(error)
         }
     }
 
@@ -53,13 +55,13 @@ const Profile = () => {
 
     return (
         <Layout>
-            <div className="container-fluid m-3 p-3">
+            <div className="container-fluid mt-4">
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <UserMenu />
                     </div>
-                    <div className="col-md-9">
-                        <h1>Profile</h1>
+                    <div className="col-md-7">
+                        <h4 className="text-center mb-4">Profile</h4>
                         <form onSubmit={handleSubmit}>
                             <div className="mb-3">
                                 <input
@@ -119,7 +121,9 @@ const Profile = () => {
 
                                 />
                             </div>
-                            <button type="submit" className="btn btn-primary">Update</button>
+                            <div className="mb-3 mx-auto text-center">
+                                <button type="submit" className="btn btn-success">Update</button>
+                            </div>
                         </form>
                     </div>
                 </div>

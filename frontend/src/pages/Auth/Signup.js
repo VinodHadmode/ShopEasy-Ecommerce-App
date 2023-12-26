@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import Layout from '../../components/Layout/Layout'
 import "../Auth/Signup.css"
 import axios from "axios"
-import {useNavigate} from "react-router-dom"
+import { useNavigate,Link } from "react-router-dom"
+import Loginbanner from "/Users/HP/Desktop/Project-1/frontend/src/Images/Login.jpg"
+import { message } from 'antd';
 
 
 const Signup = () => {
@@ -13,40 +15,42 @@ const Signup = () => {
     const [phone, setPhone] = useState("")
     const [address, setAddress] = useState("")
 
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
     //form submit
-    const handleSubmit=async(e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            
-            const res=await axios.post(`http://localhost:8080/api/v1/auth/register`,{name,email,password,phone,address})
-            if(res.data.success){
-                alert(res.data.message)
+
+            const res = await axios.post(`http://localhost:8080/api/v1/auth/register`, { name, email, password, phone, address })
+            if (res.data.success) {
+                message.success(res.data.message)
                 navigate("/login")
-            }else{
-                alert(res.data.message)
+            } else {
+                message.success(res.data.message)
             }
-            
+
         } catch (error) {
             console.log(error);
-            alert(error)
+            message.error(error)
         }
     }
 
     return (
         <Layout>
             <div className="signup">
-                <h1>Signup Page</h1> <br />
-                <form onSubmit={handleSubmit}>
+                <img src={Loginbanner} className='loginbanner' />
+
+                <form onSubmit={handleSubmit} className="p-3">
+                    <h5 className="mb-3">Signup or Login</h5>
                     <div className="mb-3">
                         <input
                             type="text"
                             value={name}
-                            onChange={(e)=>setName(e.target.value)}
+                            onChange={(e) => setName(e.target.value)}
                             className="form-control"
                             id="exampleInputName"
-                            placeholder="Enter Your Name"
+                            placeholder="Name"
                             required
                         />
                     </div>
@@ -55,10 +59,10 @@ const Signup = () => {
                         <input
                             type="email"
                             value={email}
-                            onChange={(e)=>setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
                             className="form-control"
                             id="exampleInputEmail"
-                            placeholder="Enter Your Email"
+                            placeholder="Email"
                             required
                         />
                     </div>
@@ -67,10 +71,10 @@ const Signup = () => {
                         <input
                             type="password"
                             value={password}
-                            onChange={(e)=>setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                             className="form-control"
                             id="exampleInputPassword"
-                            placeholder="Enter Your Password"
+                            placeholder="Password"
                             required
                         />
                     </div>
@@ -79,10 +83,10 @@ const Signup = () => {
                         <input
                             type="text"
                             value={phone}
-                            onChange={(e)=>setPhone(e.target.value)}
+                            onChange={(e) => setPhone(e.target.value)}
                             className="form-control"
                             id="exampleInputPhone"
-                            placeholder="Enter Your Phone"
+                            placeholder="Phone"
                             required
                         />
                     </div>
@@ -91,15 +95,25 @@ const Signup = () => {
                         <input
                             type="text"
                             value={address}
-                            onChange={(e)=>setAddress(e.target.value)}
+                            onChange={(e) => setAddress(e.target.value)}
                             className="form-control"
                             id="exampleInputAddress"
-                            placeholder="Enter Your Address"
+                            placeholder="Address"
                             required
                         />
                     </div>
+                    <div className="mb-3" style={{ color: "grey" }}>
+                        <p>By continuing, I agree to <span style={{ color: "#FF6666" }}>terms of use & Policy</span> </p>
+                    </div>
 
-                    <button type="submit" className="btn btn-primary">Sign Up</button>
+                    <div class="d-grid col-6 mx-auto mb-3">
+                        <button type="submit" className="btn btn-danger">SIGN UP</button>
+                    </div>
+
+                    <div className="mb-3" style={{ color: "grey" }}>
+                        <p className='small-text'>Already registered? <Link to={"/login"} style={{ color: "#FF6666", textDecoration: "none" }}>click here to login</Link></p>
+                    </div>
+
                 </form>
 
             </div>

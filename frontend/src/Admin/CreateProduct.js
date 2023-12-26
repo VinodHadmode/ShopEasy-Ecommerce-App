@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout/Layout'
 import AdminMenu from '../components/Layout/AdminMenu'
 import axios from 'axios'
-import { Select } from "antd"
+import { Select,message } from "antd"
 import { useAuth } from '../context/auth'
 import { useNavigate } from 'react-router-dom'
 
@@ -27,12 +27,11 @@ const CreateProduct = () => {
 
             if (data?.success) {
                 setCategories(data.categories)
-                // console.log(data);
             }
 
         } catch (error) {
             console.log(error);
-            alert(error)
+            message.error(error)
         }
     }
 
@@ -47,7 +46,6 @@ const CreateProduct = () => {
 
         // Check form validity
         if (!form.checkValidity()) {
-            // If the form is not valid, trigger HTML5 validation messages
             form.reportValidity();
             return;
         }
@@ -71,16 +69,16 @@ const CreateProduct = () => {
                 })
             if (data?.success) {
                 console.log(data.message);
-                alert(data.message);
+                message.success(data.message);
                 navigate("/dashboard/admin/products")
 
             } else {
-                alert(data.error || "Something Went Wrong While Creating New Product!!");
+                message.error(data.error || "Something Went Wrong While Creating New Product!!");
             }
 
         } catch (error) {
             console.log(error);
-            alert("Something Went Wrong While Creating New Product!!")
+            message.error("Something Went Wrong While Creating New Product!!")
         }
 
         //form empty
@@ -94,14 +92,13 @@ const CreateProduct = () => {
 
     return (
         <Layout>
-            <div className="container-fluid m-3 p-3">
+            <div className="container-fluid mt-4">
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <AdminMenu />
                     </div>
-                    <div className="col-md-9">
-                        <h3>Create new product</h3>
-
+                    <div className="col-md-7">
+                        <h4 className="mb-4 text-center">CREATE NEW PRODUCT</h4>
                         <form>
                             <div className="m-1 w-70">
                                 <Select
@@ -121,7 +118,7 @@ const CreateProduct = () => {
                                 </Select>
 
                                 <div className="mb-3">
-                                    <label className='btn btn-outline-secondary col-md-12'>
+                                    <label className='btn btn-outline-success col-md-12'>
                                         {photo ? photo.name : "Upload Product Image"}
                                         <input
                                             type="file"

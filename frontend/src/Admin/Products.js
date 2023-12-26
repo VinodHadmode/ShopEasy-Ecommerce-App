@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import AdminMenu from '../components/Layout/AdminMenu'
 import Layout from '../components/Layout/Layout'
 import axios from 'axios'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const Products = () => {
     const [products, setProducts] = useState([])
+
+    const navigate = useNavigate()
 
     //getAllProducts API
     const getAllProducts = async () => {
@@ -30,37 +32,43 @@ const Products = () => {
     }, [])
     return (
         <Layout>
-            <div className="row">
-                <div className="col-md-3">
-                    <AdminMenu />
-                </div>
+            <div className="container-fluid mt-4">
+                <div className="row">
+                    <div className="col-md-4">
+                        <AdminMenu />
+                    </div>
 
-                <div className="col-md-9">
-                    <h2 className="text-center">All Products</h2>
-                    <div className="d-flex flex-wrap">
-                        {
-                            products?.map((p) => {
-                                return <Link
-                                    key={p._id}
-                                    to={`/dashboard/admin/product/${p._id}`}
-                                    className='product-link'
-                                >
-                                    <div className="card m-2" style={{ width: '18rem' }} >
-                                        <img src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} />
-                                        <div className="card-body">
-                                            <h5 className="card-title">{p.name}</h5>
-                                            <p className="card-text">${p.price}</p>
-                                            <p className="card-text">{p.description.substring(0,50)}...</p>
+                    <div className="col-md-7">
+                        <h4 className="text-center mb-4">ALL PRODUCTS</h4>
+                        <div className="row row-cols-1 row-cols-md-3 g-4">
+                            {
+                                products?.map((p) => (
+                                    <Link
+                                        key={p._id}
+                                        to={`/dashboard/admin/product/${p._id}`}
+                                        className='product-link'
+                                    >
+                                        <div className="col">
+                                            <div className="card h-100">
+                                                <img
+                                                    src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                                                    className="card-img-top"
+                                                    alt={p.name}
+                                                    style={{ objectFit: 'cover', height: '200px' }}
+                                                />
+                                                <div className="card-body">
+                                                    <h5 className="card-title">{p.name}</h5>
+                                                    <h5 className="price-text"><span style={{ color: 'green' }}>${p.price}</span></h5>
+                                                    <p className="card-text">{p.description.substring(0, 30)}...</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-
-
-                            })
-                        }
+                                    </Link>
+                                ))
+                            }
+                        </div>
                     </div>
                 </div>
-
             </div>
         </Layout>
     )
