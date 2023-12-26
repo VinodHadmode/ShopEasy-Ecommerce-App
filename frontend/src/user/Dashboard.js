@@ -4,22 +4,22 @@ import UserMenu from '../components/Layout/UserMenu'
 import { useAuth } from '../context/auth'
 
 const Dashboard = () => {
-   const [auth,setAuth]=useAuth()
+  const [auth, setAuth] = useAuth()
 
   return (
     <Layout>
-      <div className="container-fluid m-3 p-3">
+      <div className="container-fluid mt-4">
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-md-4">
             <UserMenu />
           </div>
-          <div className="col-md-9">
-          <div className="card w-75 p-3">
-              <h3>User Name : {auth?.user?.name}</h3>
-              <h3>User Email : {auth?.user?.email}</h3>
-              <h3>User Address : {auth?.user?.address}</h3>
-
-          </div>
+          <div className="col-md-7">
+            <h4 className="mb-4 text-center">User Details</h4>
+            <div className="card p-4">
+              <h5>Name - {auth?.user?.name}</h5>
+              <h5>Email - {auth?.user?.email}</h5>
+              <h5>Address - {auth?.user?.address}</h5>
+            </div>
           </div>
         </div>
       </div>

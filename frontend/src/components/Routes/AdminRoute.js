@@ -9,7 +9,6 @@ const AdminRoute = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // console.log("Token in adminroute:", auth?.token);
         const authCheck = async () => {
             try {
                 const response = await fetch("http://localhost:8080/api/v1/auth/admin-auth", {
@@ -18,8 +17,6 @@ const AdminRoute = () => {
                         Authorization: `Bearer ${auth?.token}`
                     }
                 });
-
-                // console.log("Request Headers:", response.headers);
 
                 if (response.ok) {
                     const data = await response.json();
@@ -35,7 +32,6 @@ const AdminRoute = () => {
                 console.error("Error checking admin authentication:", error);
                 setOk(false);
             } finally {
-                // Set loading to false regardless of the result
                 setLoading(false);
             }
         };

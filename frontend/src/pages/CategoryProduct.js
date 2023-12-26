@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout/Layout'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useCart } from '../context/cart'
+import { message } from 'antd';
+
 
 const CategoryProduct = () => {
     const [catWiseProduct, setCatWiseProduct] = useState([])
     const [category, setCategory] = useState([])
 
+    const [cart, setCart] = useCart()
     const params = useParams()
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
     //getCatWiseProduct
     const getCatWiseProduct = async () => {
@@ -21,6 +25,13 @@ const CategoryProduct = () => {
         }
     }
 
+    //handleCart
+    const handleCart = (prod) => {
+        setCart([...cart, prod])
+        localStorage.setItem("cartProduct", JSON.stringify([...cart, prod]))
+        message.success(`Item added to cart!!`)
+    }
+
     useEffect(() => {
         if (params?.slug) getCatWiseProduct()
     }, [params?.slug])
@@ -28,35 +39,41 @@ const CategoryProduct = () => {
     return (
         <Layout>
             <div className="container mt-3">
-                <h4 className="text-center">Category : {category?.name}</h4>
-                <h6 className="text-center">{catWiseProduct?.length} result found</h6>
+                <h5 className="text-center">Category : {category?.name}</h5>
+                <h5 className="text-center">Results found : {catWiseProduct?.length} </h5>
 
-                <div className="d-flex flex-wrap">
-                    {
-                        catWiseProduct?.map((p) => {
-                            return (
-                                <div className="card m-2" style={{ width: '18rem' }} key={p._id}>
-                                    <img src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{p.name}</h5>
-                                        <p className="card-text">${p.price}</p>
-                                        <p className="card-text">{p.description.substring(0, 40)}...</p>
-
-                                        <button type="button" className="btn btn-primary ms-2" onClick={() => navigate(`/product/${p._id}`)}>More Details</button>
-                                        <button type="button" className="btn btn-info ms-2">ADD TO CART</button>
+                <div className="container">
+                    <div className="row row-cols-1 row-cols-md-4 g-4">
+                        {
+                            catWiseProduct?.map((p) => (
+                                <div className="col" key={p._id}>
+                                    <div className="card" style={{width: "18rem"}}>
+                                        <img
+                                            src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                                            className="card-img-top"
+                                            alt={p.name}
+                                            style={{ objectFit: 'cover', height: '200px' }}
+                                        />
+                                        <div className="card-body">
+                                            <h5 className="card-title">{p.name}</h5>
+                                            <h5 className="price-text"><span style={{ color: 'green' }}>${p.price}</span></h5>
+                                            <p className="card-text">{p.description.substring(0, 30)}...</p>
+                                            <div className="d-flex justify-content-between">
+                                                <button type="button" className="btn btn-outline-primary" onClick={() => navigate(`/product/${p._id}`)}>
+                                                MORE DETAILS
+                                                </button>
+                                                <div style={{ width: '10px' }}></div> 
+                                                <button type="button" className="btn btn-outline-success" onClick={() => handleCart(p)}>
+                                                    CART
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            )
-                        })
-                    }
+                            ))
+                        }
+                    </div>
                 </div>
-                {/* <div className="m-2 p-3">
-                    {catWiseProduct && catWiseProduct.length < total && (
-                        <button className="btn btn-warning" onClick={handleLoadMore}>
-                            {loading ? "Loading" : "Load More"}
-                        </button>
-                    )}
-                </div> */}
             </div>
         </Layout>
     )

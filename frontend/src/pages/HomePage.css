@@ -1,0 +1,55 @@
+/* HomePage.css */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container-class {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.top-image-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    margin: 0px 0px 5px 5px;
+}
+
+.top-image-container img {
+    max-width: 100%;
+    margin-bottom: 5px;
+}
+
+/* carousel css  */
+
+.product-container {
+    white-space: nowrap;
+    font-size: 0;
+    /* remove inline-block space */
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 10px;
+    display: flex;
+    overflow-x: hidden;
+    /* scroll-behavior: smooth; */
+}
+
+.product-container img {
+    max-width: 100%;
+    height: auto;
+    width: 300px; /* Set a width that fits your design */
+    height: auto;
+    margin-right: 10px;
+}

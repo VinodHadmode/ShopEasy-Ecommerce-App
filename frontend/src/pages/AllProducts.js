@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout/Layout'
 import axios from "axios"
-import { Button, Checkbox, Radio } from "antd"
+import { Checkbox, Radio } from "antd"
 import { Prices } from '../components/Prices'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/cart'
+import { message } from 'antd';
 
-const Home = () => {
+
+const AllProducts = () => {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [checked, setChecked] = useState([])
@@ -17,6 +19,9 @@ const Home = () => {
 
   const navigate = useNavigate()
   const [cart, setCart] = useCart()
+
+  console.log("radio", radio);
+  console.log("checked", checked);
 
   //getAll categories
   const getAllCategory = async () => {
@@ -29,7 +34,7 @@ const Home = () => {
 
     } catch (error) {
       console.log(error);
-      alert(error)
+      message.error(error)
     }
   }
 
@@ -124,8 +129,8 @@ const Home = () => {
   //handleCart
   const handleCart = (prod) => {
     setCart([...cart, prod])
-    localStorage.setItem("cartProduct",JSON.stringify([...cart,prod]))
-    alert(`Item added to cart!!`)
+    localStorage.setItem("cartProduct", JSON.stringify([...cart, prod]))
+    message.success(`Item added to cart!!`)
   }
 
   //all useEffect hooks
@@ -154,8 +159,9 @@ const Home = () => {
   return (
     <Layout>
       <div className="row mt-3">
-        <div className="col-md-3">
-          <h3 className="text-center">Filter by Category</h3>
+        <div className="col-md-3" style={{ borderRight: "1px solid #ccc" }}>
+          <div></div>
+          <h5 className="text-center mt-3">Filter by Category</h5>
           <div className="d-flex flex-column">
             {
               categories?.map((category) => {
@@ -165,8 +171,7 @@ const Home = () => {
               })
             }
           </div>
-          {/* fileter by price  */}
-          <h3 className="text-center mt-4">Filter by Price</h3>
+          <h5 className="text-center mt-4">Filter by Price</h5>
           <div className="d-flex flex-column">
             <Radio.Group onChange={(e) => setRadio(e.target.value)}>
               {
@@ -181,37 +186,60 @@ const Home = () => {
             </Radio.Group>
           </div>
 
-          <div className="d-flex flex-column">
-            <Button className="btn btn-danger" onClick={() => window.location.reload()}>RESET FILTERS</Button>
+          <div className="d-flex flex-column mt-3">
+            <button className="btn btn-outline-danger" onClick={() => window.location.reload()}>RESET FILTERS</button>
           </div>
 
         </div>
+
         <div className="col-md-9">
-          <h1 className="text-center">All Products</h1>
-          <div className="d-flex flex-wrap">
+          <h3 className="text-center">All Products</h3>
+          <div className="row row-cols-1 row-cols-md-3 g-4">
             {
-              products?.map((p) => {
-                return (
-                  <div className="card m-2" style={{ width: '18rem' }} key={p._id}>
-                    <img src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`} className="card-img-top" alt={p.name} />
+              products?.map((p) => (
+                <div className="col" key={p._id}>
+                  <div className="card h-100">
+                    <img
+                      src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                      className="card-img-top"
+                      alt={p.name}
+                      style={{ objectFit: 'cover', height: '200px' }}
+                    />
                     <div className="card-body">
                       <h5 className="card-title">{p.name}</h5>
-                      <p className="card-text">${p.price}</p>
-                      <p className="card-text">{p.description.substring(0, 40)}...</p>
-
-                      <button type="button" className="btn btn-primary ms-2" onClick={() => navigate(`/product/${p._id}`)}>More Details</button>
-                      <button type="button" className="btn btn-info ms-2" onClick={() => handleCart(p)}>ADD TO CART</button>
+                      <h5 className="price-text"><span style={{ color: 'green' }}>${p.price}</span></h5>
+                      <p className="card-text">{p.description.substring(0, 30)}...</p>
+                      <div className="d-flex justify-content-between">
+                        <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => navigate(`/product/${p._id}`)}>
+                          MORE DETAILS
+                        </button>
+                        <div style={{ width: '10px' }}></div>
+                        <button type="button" className="btn btn-outline-success btn-sm" onClick={() => handleCart(p)}>
+                          ADD TO CART
+                        </button>
+                      </div>
                     </div>
                   </div>
-                )
-              })
+                </div>
+              ))
             }
           </div>
-          <div className="m-2 p-3">
-            {products && products.length < total && (
+
+          <div className="m-2 p-3 text-center">
+            {products && products.length > 0 && checked.length === 0 && radio.length === 0 ? (
               <button className="btn btn-warning" onClick={handleLoadMore}>
-                {loading ? "Loading" : "Load More"}
+                {loading ? (
+                  <div className="d-flex justify-content-center">
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </div>
+                ) : 'Load More'}
               </button>
+            ) : (
+              checked.length === 0 && radio.length === 0 && (
+                <h5 className="text-center m-5">No products found.</h5>
+              )
             )}
           </div>
         </div>
@@ -220,4 +248,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default AllProducts

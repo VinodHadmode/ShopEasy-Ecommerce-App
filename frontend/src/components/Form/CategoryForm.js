@@ -13,9 +13,10 @@ const CategoryForm = ({ handleSubmit, value, setValue }) => {
                     />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <div className="mb-3 mx-auto text-center">
+                    <button type="submit" className="btn btn-success">Submit</button>
+                </div>
             </form>
-
         </>
     )
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout/Layout'
 import AdminMenu from '../components/Layout/AdminMenu'
 import axios from 'axios'
-import { Select } from "antd"
+import { Select, message } from "antd"
 import { useAuth } from '../context/auth'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -22,7 +22,7 @@ const UpdateProduct = () => {
     const navigate = useNavigate()
     const params = useParams()
 
-    //get simgle product
+    //get single product
     const getSingleProduct = async () => {
         try {
             const { data } = await axios.get(`http://localhost:8080/api/v1/product/single-product/${params.id}`)
@@ -38,7 +38,6 @@ const UpdateProduct = () => {
             }
         } catch (error) {
             console.log(error);
-
         }
     }
 
@@ -53,11 +52,10 @@ const UpdateProduct = () => {
 
             if (data?.success) {
                 setCategories(data.categories)
-                // console.log(data);
             }
         } catch (error) {
             console.log(error);
-            alert(error)
+            message.error(error)
         }
     }
 
@@ -86,17 +84,16 @@ const UpdateProduct = () => {
                 })
             if (data?.success) {
                 console.log(data.message);
-                alert(data.message);
+                message.success(data.message);
                 navigate("/dashboard/admin/products")
             } else {
-                alert(data.error || "Something Went Wrong While Updating New Product!!");
+                message.error(data.error || "Something Went Wrong While Updating New Product!!");
             }
 
         } catch (error) {
             console.log(error);
-            alert("Something Went Wrong While Updating New Product!!")
+            message.error("Something Went Wrong While Updating New Product!!")
         }
-
     }
 
     //handleDeleteProduct
@@ -105,30 +102,27 @@ const UpdateProduct = () => {
             const { data } = await axios.delete(`http://localhost:8080/api/v1/product//delete-product/${id}`)
 
             if (data?.success) {
-                alert(data.message)
+                message.success(data.message)
                 navigate("/dashboard/admin/products")
             } else {
-                alert(data.message)
+                message.error(data.message)
             }
 
         } catch (error) {
             console.log(error);
-            alert("Something Went Wrong while Deleting Product!!")
-
+            message.error("Something Went Wrong while Deleting Product!!")
         }
     }
 
-
     return (
         <Layout>
-            <div className="container-fluid m-3 p-3">
+            <div className="container-fluid m-4">
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <AdminMenu />
                     </div>
-                    <div className="col-md-9">
-                        <h3>Update Product</h3>
-
+                    <div className="col-md-7">
+                        <h4 className="mb-4 text-center">UPDATE PRODUCT</h4>
                         <form>
                             <div className="m-1 w-70">
                                 <Select
@@ -149,7 +143,7 @@ const UpdateProduct = () => {
                                 </Select>
 
                                 <div className="mb-3">
-                                    <label className='btn btn-outline-secondary col-md-12'>
+                                    <label className='btn btn-outline-success col-md-12'>
                                         {photo ? photo.name : "Upload Product Image"}
                                         <input
                                             type="file"
@@ -238,13 +232,17 @@ const UpdateProduct = () => {
                                     </Select>
                                 </div>
 
-                                <div className="mb-3">
-                                    <button type="submit" className='btn btn-primary' onClick={handleUpdateProduct}>Update Product</button>
+                                <div className="d-flex justify-content-between">
+                                    <div className="mb-3">
+                                        <button type="submit" className='btn btn-success' onClick={handleUpdateProduct}>Update Product</button>
+                                    </div>
+
+                                    <div className="mb-3">
+                                        <button type="submit" className='btn btn-danger' onClick={handleDeleteProduct}>Delete Product</button>
+                                    </div>
                                 </div>
 
-                                <div className="mb-3">
-                                    <button type="submit" className='btn btn-danger' onClick={handleDeleteProduct}>Delete Product</button>
-                                </div>
+
 
                             </div>
                         </form>

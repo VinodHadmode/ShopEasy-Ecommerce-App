@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import Layout from '../../components/Layout/Layout'
-import "../Auth/Signup.css"
+import "../Auth/Login.css"
 import axios from "axios"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, Link } from "react-router-dom"
 import { useAuth } from '../../context/auth'
+import Loginbanner from "/Users/HP/Desktop/Project-1/frontend/src/Images/Login.jpg"
+import { message } from 'antd';
+
 
 const Login = () => {
     const [email, setEmail] = useState("")
@@ -20,7 +23,7 @@ const Login = () => {
 
             const res = await axios.post(`http://localhost:8080/api/v1/auth/login`, { email, password })
             if (res.data.success) {
-                alert(res.data.message)
+                message.success(res.data.message || "login succes")
                 setAuth({
                     ...auth,
                     user: res.data.user,
@@ -28,26 +31,24 @@ const Login = () => {
                 })
 
                 localStorage.setItem("authData", JSON.stringify(res.data))
-                // console.log("location state",location.state);
-
                 navigate(location.state || "/")
             } else {
                 console.log(res.data.message);
-                alert("Login failed, Enter correct credentials!!")
+                message.error("Login failed, Enter correct credentials!!")
             }
 
         } catch (error) {
             console.log(error);
-            alert("Login failed, Enter correct credentials!!")
+            message.error("Login failed, Enter correct credentials!!")
         }
     }
     return (
         <Layout>
-            <div className="signup">
-                <h1>LOGIN FORM</h1> <br />
+            <div className="login">
+                <img src={Loginbanner} className='loginbanner' />
 
-                <form onSubmit={handleSubmit}>
-
+                <form onSubmit={handleSubmit} className="p-3">
+                    <h5 className="mb-3">Login or Signup </h5>
                     <div className="mb-3">
                         <input
                             type="email"
@@ -55,7 +56,7 @@ const Login = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             className="form-control"
                             id="exampleInputEmail"
-                            placeholder="Enter Your Email"
+                            placeholder="Email"
                             required
                         />
                     </div>
@@ -67,14 +68,19 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             className="form-control"
                             id="exampleInputPassword"
-                            placeholder="Enter Your Password"
+                            placeholder="Password"
                             required
                         />
                     </div>
-
-
-
-                    <button type="submit" className="btn btn-primary">Login</button>
+                    <div className="mb-3" style={{ color: "grey" }}>
+                        <p>By continuing, I agree to <span style={{ color: "#FF6666" }}>terms of use & Policy</span> </p>
+                    </div>
+                    <div class="d-grid col-6 mx-auto mb-3">
+                        <button type="submit" class="btn btn-danger">LOG IN</button>
+                    </div>
+                    <div className="mb-3" style={{ color: "grey" }}>
+                        <p className='small-text'>Not Signed up? <Link to={"/signup"} style={{ color: "#FF6666", textDecoration: "none" }}>click here</Link></p>
+                    </div>
                 </form>
 
             </div>
