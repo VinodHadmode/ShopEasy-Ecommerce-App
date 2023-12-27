@@ -50,7 +50,7 @@ const CategoryProduct = () => {
                                     <div className="card" style={{width: "18rem"}}>
                                         <img
                                             src={`${BASE_URL}/api/v1/product/product-photo/${p._id}`}
-                                            className="card-img-top"
+                                            className="card-img-top p-3"
                                             alt={p.name}
                                             style={{ objectFit: 'cover', height: '200px' }}
                                         />
