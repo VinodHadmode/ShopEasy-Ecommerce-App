@@ -102,19 +102,12 @@ const testController = (req, res) => {
 //updateProfileController
 const updateProfileController = async (req, res) => {
     try {
-        const { name, password, phone, address } = req.body
+        const { name, phone, address } = req.body
         const user = await userModel.findById(req.user._id)
-
-        if (password && password.length < 6) {
-            return res.json({ error: "6 Character long password required!!" })
-        }
-
-        const hashedPassword = password ? hashPassword(password) : undefined
 
         const updatedUser = await userModel
             .findByIdAndUpdate(req.user._id, {
                 name: name || user.name,
-                password: hashedPassword || user.password,
                 phone: phone || user.phone,
                 address: address || user.address,
             },

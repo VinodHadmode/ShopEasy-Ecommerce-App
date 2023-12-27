@@ -21,8 +21,6 @@ const AllProducts = () => {
   const navigate = useNavigate()
   const [cart, setCart] = useCart()
 
-  console.log("radio", radio);
-  console.log("checked", checked);
 
   //getAll categories
   const getAllCategory = async () => {

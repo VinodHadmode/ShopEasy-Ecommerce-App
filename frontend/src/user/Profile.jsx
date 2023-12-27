@@ -9,7 +9,7 @@ import { BASE_URL } from '../Helpers/helper'
 const Profile = () => {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    // const [password, setPassword] = useState("")
     const [phone, setPhone] = useState("")
     const [address, setAddress] = useState("")
 
@@ -20,13 +20,13 @@ const Profile = () => {
         e.preventDefault()
         try {
             const { data } = await axios.put(`${BASE_URL}/api/v1/auth/profile`,
-                { name, email, password, phone, address },
+                { name, email, phone, address },
                 {
                     headers: {
                         Authorization: `Bearer ${auth?.token}`
                     }
                 })
-
+                
             if (data?.success) {
                 setAuth({ ...auth, user: data?.updatedUser })
                 let ls = localStorage.getItem("authData")
@@ -36,11 +36,11 @@ const Profile = () => {
                 message.success("Profile Updated Successfully!!")
 
             } else {
-                message.error(data?.error)
+                message.error('An error occurred while updating profile!!')
             }
         } catch (error) {
             console.log(error);
-            message.error(error)
+            message.error('An error occurred while updating profile!!')
         }
     }
 
@@ -86,7 +86,7 @@ const Profile = () => {
                                 />
                             </div>
 
-                            <div className="mb-3">
+                            {/* <div className="mb-3">
                                 <input
                                     type="password"
                                     value={password}
@@ -94,9 +94,8 @@ const Profile = () => {
                                     className="form-control"
                                     id="exampleInputPassword"
                                     placeholder="Enter Your Password"
-
                                 />
-                            </div>
+                            </div> */}
 
                             <div className="mb-3">
                                 <input
